@@ -1,0 +1,48 @@
+= MongoMapper::Plugins::Sanitize
+
+Tiny plugin for MongoMapper to sanitize strings before validation.
+
+== Requires
+
+* MongoMapper
+* Sanitize
+
+== Usage
+
+Either load it into all models, or individual models:
+
+    # add to all models
+    MongoMapper::Document.append_inclusions(MongoMapper::Plugins::Sanitize)
+
+    # add to a specific model
+    plugin MongoMapper::Plugins::Sanitize
+
+Once it's loaded into a model, configure with 'sanitize'
+
+    sanitize :list, :of, :keys
+
+This will use the default Sanitize config, if you want to override then set the :config option:
+  
+    # Use the built-in Sanitize::Config::RESTRICTED configuration
+    sanitize :title, :config => Sanitize::Config::RESTRICTED
+    
+    # Use a custom configuration
+    sanitize :description, :config => {:elements => ['a', 'span']}
+    
+See the Sanitize Docs (https://github.com/rgrove/sanitize) for more details on the different configuration options.
+
+== Note on Patches/Pull Requests
+
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a future version unintentionally.
+* Commit, do not mess with rakefile, version, or history. (if you want to have your own version, that is fine but bump version in a commit by itself in another branch so I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+== Install
+
+ $ gem install mm-sanitize
+
+== Copyright
+
+See LICENSE for details.
