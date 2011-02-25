@@ -8,10 +8,6 @@ module MongoMapper
         model.plugin self
       end
 
-      def self.configure(base)
-        base.before_validation :sanitize_attributes
-      end
-
       module ClassMethods
         def sanitize(*keys)
           options = keys.pop if keys.last.is_a?(Hash)
@@ -21,6 +17,8 @@ module MongoMapper
           keys.each do |key|
             @sanitize_keys[key] = options[:config]
           end
+
+          self.send(:before_validation, :sanitize_attributes)
         end
 
         class_eval do

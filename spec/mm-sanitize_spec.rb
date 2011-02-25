@@ -130,7 +130,24 @@ describe "MongoMapper::Plugins::Sanitize" do
       doc.hash_field[:one].should == "testing"
       doc.hash_field[:two].should == "something"
     end
-
   end
 
+  describe "model with no sanitizing" do
+
+    before(:each) do
+      @doc_class = Doc do
+        plugin MongoMapper::Plugins::Sanitize
+
+        key :body, String
+      end
+    end
+
+    it "should not change anything" do
+      doc = @doc_class.new(:body => '<b><a href="/">something</a></b>')
+      lambda {
+        doc.valid?
+      }.should_not change(doc, :body)
+    end
+
+  end
 end
