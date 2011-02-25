@@ -98,4 +98,39 @@ describe "MongoMapper::Plugins::Sanitize" do
 
   end
 
+  describe "sanitizing complex fields" do
+
+    before(:each) do
+      @doc_class = Doc do
+        plugin MongoMapper::Plugins::Sanitize
+
+        sanitize :set_field, :hash_field, :array_field
+
+        key :set_field,   Set
+        key :hash_field,  Hash
+        key :array_field, Array
+      end
+    end
+
+    it "should sanitize the contents of arrays" do
+      doc = @doc_class.new(:array_field => ["<i>one</i>", "<b>two</b>"])
+      doc.valid?
+      doc.array_field.should == ["one", "two"]
+    end
+
+    it "should sanitize the contents of sets" do
+      doc = @doc_class.new(:set_field => ["<i>one</i>", "<b>two</b>"])
+      doc.valid?
+      doc.set_field.to_a.sort.should == ["one", "two"]
+    end
+
+    it "should sanitize the contents of hashes" do
+      doc = @doc_class.new(:hash_field => {:one => "<b>testing</b>", :two => "<b>something</b>"})
+      doc.valid?
+      doc.hash_field[:one].should == "testing"
+      doc.hash_field[:two].should == "something"
+    end
+
+  end
+
 end

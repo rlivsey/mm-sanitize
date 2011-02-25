@@ -31,7 +31,17 @@ module MongoMapper
       module InstanceMethods
         def sanitize_attributes
           self.class.sanitize_keys.each do |key, config|
-            self[key] = ::Sanitize.clean(self[key], config || {})
+            config ||= {}
+
+            if val = self[key]
+              if val.is_a?(Array) || val.is_a?(Set)
+                self[key] = val.collect{|v| ::Sanitize.clean(v, config) }
+              elsif val.is_a?(Hash)
+                self[key] = val.each{|k, v| val[k] = ::Sanitize.clean(v, config) if v.is_a?(String) }
+              elsif val.is_a?(String)
+                self[key] = ::Sanitize.clean(val, config)
+              end
+            end
           end
         end
       end
