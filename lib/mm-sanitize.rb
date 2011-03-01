@@ -10,19 +10,19 @@ module MongoMapper
 
       module ClassMethods
         def sanitize(*keys)
+          unless defined?(sanitize_keys)
+            class_attribute :sanitize_keys
+          end
+
           options = keys.pop if keys.last.is_a?(Hash)
           options ||= {}
 
-          @sanitize_keys ||= {}
+          self.sanitize_keys ||= {}
           keys.each do |key|
-            @sanitize_keys[key] = options[:config]
+            self.sanitize_keys[key] = options[:config]
           end
 
           self.send(:before_validation, :sanitize_attributes)
-        end
-
-        class_eval do
-          attr_reader :sanitize_keys
         end
       end
 
