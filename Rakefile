@@ -21,7 +21,7 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "mm-sanitize"
-  s.version           = "0.1.3"
+  s.version           = "0.1.4"
   s.summary           = "Tiny plugin for MongoMapper to sanitize strings before validation."
   s.author            = "Richard Livsey"
   s.email             = "youremail@example.com"
