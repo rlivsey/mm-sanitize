@@ -30,6 +30,13 @@ describe "MongoMapper::Plugins::Sanitize" do
       }.should_not change(doc, :title)
     end
 
+    it "should keep the original value in original_body" do
+      doc = @doc_class.new(:body => '<b><a href="/">something</a></b>')
+      lambda {
+        doc.valid?
+      }.should change(doc, :original_body).from(nil).to('<b><a href="/">something</a></b>')
+    end
+
   end
 
   describe "sanitizing an individual field with a config" do
@@ -49,6 +56,25 @@ describe "MongoMapper::Plugins::Sanitize" do
       doc = @doc_class.new(:body => '<b><a href="/">something</a></b>')
       doc.valid?
       doc.body.should == "<b>something</b>"
+    end
+
+  end
+
+  describe "skip storing original value" do
+
+    before(:each) do
+      @doc_class = Doc do
+        plugin MongoMapper::Plugins::Sanitize
+
+        sanitize :body, :keep_original => false
+
+        key :body, String
+        key :title, String
+      end
+    end
+
+    it "should not keep the original value in original_body" do
+      @doc_class.keys["original_body"].should be_nil
     end
 
   end

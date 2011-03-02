@@ -22,13 +22,32 @@ Once it's loaded into a model, configure with 'sanitize'
     sanitize :list, :of, :keys
 
 This will use the default Sanitize config, if you want to override then set the :config option:
-  
+
     # Use the built-in Sanitize::Config::RESTRICTED configuration
     sanitize :title, :config => Sanitize::Config::RESTRICTED
-    
+
     # Use a custom configuration
     sanitize :description, :config => {:elements => ['a', 'span']}
-    
+
+The original text is stored as original_#{key}, for example:
+
+    class Item
+      key :description, String
+
+      sanitize :description
+    end
+
+    item = Item.create(:description => "some <b>text</b>")
+    item.description => "some text"
+    item.original_description => "some <b>text</b>"
+
+IMPORTANT - calling sanitize sets up original_#{key} as a copy of the existing key if it exists
+If the key doesn't yet exist, it will assume it's a String field, so if you use something different then make sure to define it first.
+
+You can disable this behaviour by setting :keep_original to false
+
+    sanitize :description, :keep_original => false
+
 See the Sanitize Docs (https://github.com/rgrove/sanitize) for more details on the different configuration options.
 
 == Note on Patches/Pull Requests
