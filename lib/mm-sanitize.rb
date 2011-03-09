@@ -4,9 +4,7 @@ require 'sanitize'
 module MongoMapper
   module Plugins
     module Sanitize
-      def self.included(model)
-        model.plugin self
-      end
+      extend ActiveSupport::Concern
 
       module ClassMethods
         def sanitize(*args)
