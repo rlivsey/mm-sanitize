@@ -15,7 +15,7 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "mm-sanitize"
-  s.version           = "0.1.4"
+  s.version           = "0.2.0"
   s.summary           = "Tiny plugin for MongoMapper to sanitize strings before validation."
   s.author            = "Richard Livsey"
   s.email             = "youremail@example.com"
@@ -31,7 +31,7 @@ spec = Gem::Specification.new do |s|
 
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
-  s.add_dependency("mongo_mapper")
+  s.add_dependency("mongo_mapper", ">= 0.9.0")
   s.add_dependency("sanitize")
 
   # If your tests use any gems, include them here
